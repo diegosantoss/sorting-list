@@ -1,45 +1,65 @@
-function newvalue(){
-	let novoli = document.getElementById('novoli').value;
-	if(novoli === ''){
-		alert("preencha algo para incluir.");
-		return false;
-	}
+(function() {
+  "use strict";
 
-	let namesList = document.getElementById('names');
-	let list = document.createElement('li');
-	list.innerHTML = novoli;
-	namesList.appendChild(list);
+  window.addEventListener("DOMContentLoaded", function() {
+    var $formSubmit = document.forms["form-submit"];
+    var $ulNames = document.querySelector("ul#names");
+    var $sortNames = document.querySelector("button#sort");
+    var $nameDefault = document.querySelector(".name-default");
+    var $lisNames;
+    var li;
+    var text;
 
-	limparNovoli();
+    $formSubmit.addEventListener("submit", formSubmited);
+    $sortNames.addEventListener("click", sortingNames);
 
-	$('#names > li').on('click', function(e){
-		this.remove();
-	});	
-};
+    function nameDefault() {
+      $nameDefault.style.display = "none";
+    }
 
-function ordenar(){
-	var arr = [];
-	let namesList = document.getElementById("names");
-	let list = namesList.getElementsByTagName("li");
-	for (var i = 0; i < list.length; i++) {
-		let z = list[i].innerText;
-		arr.push(z);
-		arr.sort();
-	}
-	$('li').remove();
-	arr.forEach(function(index, val) {
-		namesList.innerHTML = namesList.innerHTML + '<li>' + arr[val] + '</li>';
-	});
+    function formSubmited(e) {
+      e.preventDefault();
 
-	$('#names > li').on('click', function(e){
-		this.remove();
-	});
-}
+      var input = $formSubmit.querySelector('input[type="text"]').value;
 
-$('#names > li').on('click', function(e){
-	this.remove();
-});
+      if (!!input) {
+        nameDefault();
+      } else {
+        alert("Name is empty");
+        return;
+      }
 
-function limparNovoli(){
-	document.getElementById('novoli').value = "";
-}
+      createLi(input);
+
+      $formSubmit.reset();
+    }
+
+    function createLi(name) {
+      li = document.createElement("li");
+      text = document.createTextNode(name);
+
+      li.appendChild(text);
+      $ulNames.appendChild(li);
+    }
+
+    function sortingNames(e) {
+      e.preventDefault();
+      var sortNames = [];
+      $lisNames = $ulNames.querySelectorAll("li");
+
+      for (var x = 0; x < $lisNames.length; x++) {
+        var name = $lisNames[x].textContent.toLowerCase();
+        sortNames.push(name);
+        sortNames.sort();
+      }
+
+      for (var x = 0; x < $lisNames.length; x++) {
+        $lisNames[x].parentNode.removeChild($lisNames[x]);
+      }
+
+      for (var x = 0; x < sortNames.length; x++) {
+        createLi(sortNames[x]);
+      }
+    }
+  });
+})();
