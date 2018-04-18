@@ -11,6 +11,7 @@
     var text;
 
     $formSubmit.addEventListener("submit", formSubmited);
+    $ulNames.addEventListener('click', removeName);
     $sortNames.addEventListener("click", sortingNames);
 
     function nameDefault() {
@@ -40,6 +41,8 @@
 
       li.appendChild(text);
       $ulNames.appendChild(li);
+
+      return 
     }
 
     function sortingNames(e) {
@@ -60,6 +63,15 @@
       for (var x = 0; x < sortNames.length; x++) {
         createLi(sortNames[x]);
       }
+    }
+
+    function removeName(e){
+      var target = e.target;
+      var remove = confirm("Remove name " + target.textContent + ' ?');
+
+      if(remove){
+        target.parentNode.removeChild(target);
+      } 
     }
   });
 })();
